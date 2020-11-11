@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
-import {concat, interval, of} from "rxjs";
+import {concat, interval, of, Subject} from "rxjs";
 import {scan, startWith, takeWhile} from "rxjs/operators";
 
 const countDown$ = interval(1000).pipe(
@@ -10,6 +10,10 @@ const countDown$ = interval(1000).pipe(
 )
 
 const observable$ = concat(countDown$, of("Wake Up"));
+
+const action$ = new Subject();
+
+action$.subscribe(console.log)
 
 function App() {
     const [state, setState] = useState();
@@ -21,6 +25,7 @@ function App() {
         <div className="App">
             <h3>Alarm Clock</h3>
           <div className="display">{state}</div>
+            <button className="snooze" onClick={() => action$.next('snooze')}>Snooze</button>
         </div>
     );
 }
