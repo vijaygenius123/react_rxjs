@@ -1,13 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
-import {interval} from "rxjs";
+import {concat, interval, of} from "rxjs";
 import {scan, startWith, takeWhile} from "rxjs/operators";
 
-const observable$ = interval(1000).pipe(
+const countDown$ = interval(1000).pipe(
     startWith(5),
     scan(time => time - 1 ),
     takeWhile(time => time > 0)
 )
+
+const observable$ = concat(countDown$, of("Wake Up"));
 
 function App() {
     const [state, setState] = useState();
